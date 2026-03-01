@@ -1,0 +1,527 @@
+{
+  "info": {
+    "name": "AI-Powered Request Validator",
+    "description": "Postman Collection for AI-Powered Request Validator using Spring Boot + LangChain4j + Google Gemini",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "👤 User Registration",
+      "item": [
+        {
+          "name": "✅ Register Valid User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Smith\",\n  \"email\": \"john.smith@gmail.com\",\n  \"password\": \"SecurePass@123\",\n  \"phone\": \"+1-555-234-5678\",\n  \"address\": \"123 Main St, New York, NY\",\n  \"age\": 28,\n  \"bio\": \"Software developer with 5 years of experience\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Registers a valid user with realistic data. Expected response: 200 OK with success message and high confidence score."
+          },
+          "response": [
+            {
+              "name": "200 OK - User Registered",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User registered successfully!\",\n  \"confidenceScore\": 95,\n  \"warnings\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "❌ Register Fake User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"asdfjkl\",\n  \"lastName\": \"qwerty\",\n  \"email\": \"fake@@notreal..com\",\n  \"password\": \"123\",\n  \"phone\": \"000-000-0000\",\n  \"address\": \"asdfgh\",\n  \"age\": 999,\n  \"bio\": \"Buy cheap meds at www.spam.com!!!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Attempts to register with fake/spam data. Expected response: 400 BAD REQUEST with validation errors."
+          },
+          "response": [
+            {
+              "name": "400 BAD REQUEST - Validation Failed",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 400,\n  \"error\": \"Validation Failed\",\n  \"message\": \"Validation Failed: Name appears to be random characters, Invalid email format, Password too weak, Age is unrealistic, Bio contains spam content\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "⚠️ Register Suspicious User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Test@1234\",\n  \"phone\": \"+1-555-000-0000\",\n  \"address\": \"Test Address\",\n  \"age\": 25,\n  \"bio\": \"test bio\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Registers with suspicious/test-looking data. Expected response: 400 BAD REQUEST with low confidence score warning."
+          },
+          "response": [
+            {
+              "name": "400 BAD REQUEST - Suspicious Data",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 400,\n  \"error\": \"Validation Failed\",\n  \"message\": \"Suspicious data detected. Confidence score too low: 35%\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "✅ Register International User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Sarah\",\n  \"lastName\": \"Johnson\",\n  \"email\": \"sarah.johnson@outlook.com\",\n  \"password\": \"MyPass@456\",\n  \"phone\": \"+44-7911-123456\",\n  \"address\": \"10 Downing St, London, UK\",\n  \"age\": 32,\n  \"bio\": \"Marketing manager with passion for travel\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Registers a valid international user with a UK phone number and address."
+          },
+          "response": [
+            {
+              "name": "200 OK - International User Registered",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User registered successfully!\",\n  \"confidenceScore\": 96,\n  \"warnings\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "❌ Register With Weak Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Alice\",\n  \"lastName\": \"Brown\",\n  \"email\": \"alice.brown@gmail.com\",\n  \"password\": \"pass\",\n  \"phone\": \"+1-555-876-5432\",\n  \"address\": \"456 Oak Ave, Chicago, IL\",\n  \"age\": 24,\n  \"bio\": \"Graphic designer and artist\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Registers with a weak password. Expected response: 400 BAD REQUEST with password strength error."
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Register With Invalid Age",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Bob\",\n  \"lastName\": \"Williams\",\n  \"email\": \"bob.williams@gmail.com\",\n  \"password\": \"BobPass@789\",\n  \"phone\": \"+1-555-432-1098\",\n  \"address\": \"789 Pine Rd, Houston, TX\",\n  \"age\": -5,\n  \"bio\": \"Freelance writer and blogger\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Registers with a negative/invalid age. Expected response: 400 BAD REQUEST."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📦 Product Management",
+      "item": [
+        {
+          "name": "✅ Create Valid Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/product",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "product"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Apple iPhone 15 Pro\",\n  \"description\": \"Latest Apple smartphone with A17 Pro chip and titanium design\",\n  \"price\": 999.99,\n  \"quantity\": 50,\n  \"category\": \"Electronics\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creates a valid product with realistic data. Expected response: 200 OK."
+          },
+          "response": [
+            {
+              "name": "200 OK - Product Created",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Product created successfully!\",\n  \"confidenceScore\": 97,\n  \"warnings\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "❌ Create Spam Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/product",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "product"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"asdfghjkl\",\n  \"description\": \"buy now click here www.spam.com GET RICH QUICK!!!\",\n  \"price\": -500,\n  \"quantity\": -10,\n  \"category\": \"xyz123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Attempts to create a spam/invalid product. Expected response: 400 BAD REQUEST."
+          },
+          "response": [
+            {
+              "name": "400 BAD REQUEST - Spam Product",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 400,\n  \"error\": \"Validation Failed\",\n  \"message\": \"Validation Failed: Product name looks invalid, Description contains spam, Price cannot be negative, Quantity cannot be negative\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "✅ Create Valid Clothing Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/product",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "product"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nike Air Max 270\",\n  \"description\": \"Comfortable running shoes with air cushioning technology\",\n  \"price\": 150.00,\n  \"quantity\": 200,\n  \"category\": \"Footwear\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creates a valid clothing/footwear product."
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Create Product With Negative Price",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/product",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "product"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Samsung Galaxy S24\",\n  \"description\": \"Android smartphone with advanced camera system\",\n  \"price\": -299.99,\n  \"quantity\": 30,\n  \"category\": \"Electronics\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Attempts to create a product with a negative price. Expected response: 400 BAD REQUEST."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Create Valid Food Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/product",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "product"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Organic Green Tea\",\n  \"description\": \"Premium organic green tea sourced from Japanese farms\",\n  \"price\": 19.99,\n  \"quantity\": 500,\n  \"category\": \"Food & Beverages\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creates a valid food product."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔍 Validate Only",
+      "item": [
+        {
+          "name": "✅ Validate Valid User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validate/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "validate", "user"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Sarah\",\n  \"lastName\": \"Johnson\",\n  \"email\": \"sarah.johnson@outlook.com\",\n  \"password\": \"MyPass@456\",\n  \"phone\": \"+44-7911-123456\",\n  \"address\": \"10 Downing St, London, UK\",\n  \"age\": 32,\n  \"bio\": \"Marketing manager with passion for travel\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Validates user data without saving. Returns full ValidationResult object."
+          },
+          "response": [
+            {
+              "name": "200 OK - Validation Passed",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"valid\": true,\n  \"errors\": [],\n  \"warnings\": [],\n  \"suggestion\": \"All data looks legitimate and properly formatted\",\n  \"confidenceScore\": 96\n}"
+            }
+          ]
+        },
+        {
+          "name": "❌ Validate Invalid User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validate/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "validate", "user"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"xyz\",\n  \"lastName\": \"abc\",\n  \"email\": \"notanemail\",\n  \"password\": \"weak\",\n  \"phone\": \"12345\",\n  \"address\": \"\",\n  \"age\": 0,\n  \"bio\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Validates completely invalid user data. Returns validation errors."
+          },
+          "response": [
+            {
+              "name": "200 OK - Validation Failed",
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"valid\": false,\n  \"errors\": [\n    \"First name appears invalid\",\n    \"Last name appears invalid\",\n    \"Email format is incorrect\",\n    \"Password is too weak\",\n    \"Phone number format is invalid\",\n    \"Address cannot be empty\",\n    \"Age must be greater than 0\"\n  ],\n  \"warnings\": [\n    \"Bio is empty, consider adding one\"\n  ],\n  \"suggestion\": \"Please provide valid and realistic information\",\n  \"confidenceScore\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "⚠️ Validate Borderline User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/validate/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "validate", "user"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Alex\",\n  \"lastName\": \"Lee\",\n  \"email\": \"alex@company.io\",\n  \"password\": \"Alex@2024\",\n  \"phone\": \"+1-800-123-4567\",\n  \"address\": \"Suite 100, Business Park\",\n  \"age\": 18,\n  \"bio\": \"Student\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Validates a borderline case — valid but may trigger some warnings."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
