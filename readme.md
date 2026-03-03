@@ -66,17 +66,6 @@ GEMINI_API_KEY = your_actual_key_here
 
 ---
 
-## 🗺️ Roadmap
-
-Upcoming labs planned:
-
-- [ ] `labs/03-ai-chat-memory` — Conversation memory with session management
-- [ ] `labs/04-rag-document-search` — RAG with PDF document ingestion
-- [ ] `labs/05-ai-image-analyzer` — Image analysis using Gemini Vision
-- [ ] `labs/06-ai-code-reviewer` — AI powered code review agent
-
----
-
 ## 📈 Gemini Free Tier
 
 | Model | Requests/Day | Tokens/Min |
@@ -84,7 +73,3 @@ Upcoming labs planned:
 | gemini-1.5-flash | 1,500 | 1,000,000 |
 
 ---
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
