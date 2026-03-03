@@ -2,10 +2,7 @@ package com.langchain4j_poc.controller;
 
 import com.langchain4j_poc.service.TaskAgent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +13,9 @@ public class AgentController {
 
 
     @PostMapping("/ask")
-    public String chat(@RequestBody String message) {
-        return agent.chat(message);
+    public String chat(
+            @RequestParam(defaultValue = "default-session") String sessionId,
+            @RequestBody String message) {
+        return agent.chat(sessionId, message);
     }
 }

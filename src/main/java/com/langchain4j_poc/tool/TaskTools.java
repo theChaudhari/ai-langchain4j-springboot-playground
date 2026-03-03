@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -45,6 +46,18 @@ public class TaskTools {
     @Tool("Get all tasks excluding a specific status. Use this when user asks for tasks that are NOT a certain status.")
     public List<Task> getTasksExcludingStatus(String excludeStatus) {
         return repository.findByStatusNot(excludeStatus);
+    }
+
+    @Tool("Update task status by title name. Use when user mentions task name or says 'it', 'that task', 'the task'. Valid statuses: CREATED, IN_PROGRESS, COMPLETED, CANCELLED")
+    public String updateTaskByTitle(String title, String status) {
+        Optional<Task> optionalTask = repository.findByTitleIgnoreCase(title);
+        if (optionalTask.isEmpty()) {
+            return "Task not found with title: " + title;
+        }
+        Task task = optionalTask.get();
+        task.setStatus(status);
+        repository.save(task);
+        return "Task '" + title + "' updated to " + status + " successfully";
     }
 
 }
