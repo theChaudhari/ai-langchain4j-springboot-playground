@@ -1,0 +1,372 @@
+{
+  "info": {
+    "name": "AI Task Agent — LangChain4j + Gemini",
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "description": "Postman collection for AI Agent Task Assistance POC built with Spring Boot, LangChain4j, and Google Gemini.\n\nAll requests go to POST /agent/ask with plain text body.\nThe AI interprets the message and calls the appropriate tool.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "📝 Create Tasks",
+      "item": [
+        {
+          "name": "Create Single Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Create a task titled \"Fix login bug\""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Creates a single task. AI calls createTask() tool with the given title."
+          }
+        },
+        {
+          "name": "Create Multiple Tasks",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Create three tasks: \"Design UI\", \"Write unit tests\", \"Deploy to staging\""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Creates multiple tasks in one prompt. AI calls createTask() multiple times."
+          }
+        },
+        {
+          "name": "Create Task (Natural Language)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "I need to add a task for paying the electricity bill"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Creates a task using informal natural language."
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Get Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Show me all tasks"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Returns all tasks. AI calls getAllTasks() tool."
+          }
+        },
+        {
+          "name": "Get All Tasks (Natural Language)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "What tasks do I have right now?"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Returns all tasks using informal phrasing."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔍 Filter Tasks",
+      "item": [
+        {
+          "name": "Filter by CREATED Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Show me all CREATED tasks"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Filters tasks where status = CREATED."
+          }
+        },
+        {
+          "name": "Filter by IN_PROGRESS Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Show me all tasks that are in progress"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Filters tasks where status = IN_PROGRESS."
+          }
+        },
+        {
+          "name": "Filter by COMPLETED Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Show me all completed tasks"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Filters tasks where status = COMPLETED."
+          }
+        },
+        {
+          "name": "Get Tasks NOT Completed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Show me tasks that are not completed"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Returns tasks excluding COMPLETED status. AI calls getTasksExcludingStatus(\"COMPLETED\")."
+          }
+        },
+        {
+          "name": "Get Tasks NOT Cancelled",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Show me all tasks that are not cancelled"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Returns tasks excluding CANCELLED status."
+          }
+        }
+      ]
+    },
+    {
+      "name": "✏️ Update Tasks",
+      "item": [
+        {
+          "name": "Update Task to COMPLETED",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Update task with id 1 to status COMPLETED"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Updates task status to COMPLETED. AI calls updateTask(1, \"COMPLETED\")."
+          }
+        },
+        {
+          "name": "Update Task to IN_PROGRESS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Mark task 2 as IN_PROGRESS"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Updates task status to IN_PROGRESS."
+          }
+        },
+        {
+          "name": "Update Task to CANCELLED",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Mark task 3 as CANCELLED"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Updates task status to CANCELLED."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔀 Combined Operations",
+      "item": [
+        {
+          "name": "Create and Update in One Prompt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Create a task called \"Write documentation\" and mark it as IN_PROGRESS"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "AI chains createTask() and updateTask() in a single prompt."
+          }
+        },
+        {
+          "name": "Create then List All",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "Create a task titled \"Code Review\" and then show me all tasks"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agent/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["agent", "ask"]
+            },
+            "description": "Creates a task then immediately lists all tasks."
+          }
+        }
+      ]
+    }
+  ]
+}
