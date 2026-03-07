@@ -14,37 +14,42 @@ A Spring Boot POC that uses **Google Gemini AI** via **LangChain4j** to manage t
 | H2 Database | Runtime | In-Memory Database |
 | Spring Data JPA | — | ORM |
 | Lombok | — | Boilerplate Reduction |
+| Docker | 20.10+ | Containerisation |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/main/java/com/langchain4j_poc/
-├── config/
-│   └── LangChain4jConfig.java        # Gemini ChatModel bean
-├── controller/
-│   └── AgentController.java          # POST /agent/ask
-├── entity/
-│   └── Task.java                     # Task JPA entity
-├── repository/
-│   └── TaskRepository.java           # JPA Repository
-├── service/
-│   └── TaskAgent.java                # @AiService interface
-└── tool/
-    └── TaskTools.java                # @Tool methods (AI callable)
+.
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+├── src/main/java/com/langchain4j_poc/
+│   ├── config/
+│   │   └── LangChain4jConfig.java        # Gemini ChatModel bean
+│   ├── controller/
+│   │   └── AgentController.java          # POST /agent/ask
+│   ├── entity/
+│   │   └── Task.java                     # Task JPA entity
+│   ├── repository/
+│   │   └── TaskRepository.java           # JPA Repository
+│   ├── service/
+│   │   └── TaskAgent.java                # @AiService interface
+│   └── tool/
+│       └── TaskTools.java                # @Tool methods (AI callable)
 ```
 
 ---
 
-## ⚙️ Setup & Configuration
+## ⚙️ Configuration
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/theChaudhari/langchain4j-springBoot-poc.git
-cd langchain4j-springBoot-poc
-git checkout project/ai-agent-task-assistance-gemini
+git clone https://github.com/theChaudhari/ai-langchain4j-springboot-playground.git
+cd ai-langchain4j-springboot-playground
+git checkout labs/ai-task-agent
 ```
 
 ### 2. Get Your Gemini API Key
@@ -54,17 +59,10 @@ git checkout project/ai-agent-task-assistance-gemini
 3. Click **Get API Key** → **Create API Key**
 4. Copy your key
 
-### 3. Set API Key in IntelliJ
-
-1. Click run configuration dropdown → **Edit Configurations**
-2. Find **Environment Variables** → Click the icon
-3. Add: `GEMINI_API_KEY` = `your_actual_key_here`
-4. Click **OK → Apply → OK**
-
-### 4. application.properties
+### 3. application.properties
 
 ```properties
-# Gemini AI
+# Gemini AI — key is injected via GEMINI_API_KEY env variable
 gemini.api.key=${GEMINI_API_KEY}
 gemini.model=gemini-1.5-flash
 
@@ -91,11 +89,53 @@ spring.jpa.open-in-view=false
 spring.output.ansi.enabled=always
 ```
 
-### 5. Run the Application
+---
+
+## 🐳 Run via Docker Hub
+
+No need to build anything. Just pull and run directly.
+
+**Step 1 — Pull the image:**
 
 ```bash
+docker pull thechaudhari/ai-task-agent:latest
+```
+
+**Step 2 — Run it:**
+
+```bash
+# Mac/Linux
+docker run -p 8080:8080 \
+  -e GEMINI_API_KEY=your_actual_gemini_api_key_here \
+  thechaudhari/ai-task-agent:latest
+
+# Windows PowerShell
+docker run -p 8080:8080 -e GEMINI_API_KEY=your_actual_gemini_api_key_here thechaudhari/ai-task-agent:latest
+```
+
+App will be available at `http://localhost:8080`.
+
+> 🐋 Docker Hub: [thechaudhari/ai-task-agent](https://hub.docker.com/repository/docker/thechaudhari/ai-task-agent)
+
+> ⚠️ `GEMINI_API_KEY` is required — the app will start but all AI calls will fail without it.
+
+---
+
+## 🏃 Running Without Docker
+
+```bash
+# Set env variable first
+export GEMINI_API_KEY=your_actual_gemini_api_key_here
+
 mvn spring-boot:run
 ```
+
+Or set it inside **IntelliJ IDEA**:
+
+1. Click run configuration dropdown → **Edit Configurations**
+2. Find **Environment Variables** → click the folder icon
+3. Add: `GEMINI_API_KEY` = `your_actual_key_here`
+4. Click **OK → Apply → OK**
 
 ---
 
@@ -124,6 +164,7 @@ http://localhost:8080/h2-console
 Send a plain English message. The AI decides which tool to invoke.
 
 **Headers:**
+
 ```
 Content-Type: text/plain
 ```
@@ -135,36 +176,43 @@ Content-Type: text/plain
 ## 🧪 Sample Requests
 
 ### ✅ Create a Task
+
 ```
 Create a task titled "Fix login bug"
 ```
 
 ### ✅ Create Multiple Tasks
+
 ```
 Create three tasks: "Design UI", "Write unit tests", "Deploy to staging"
 ```
 
 ### ✅ Get All Tasks
+
 ```
 Show me all tasks
 ```
 
 ### ✅ Filter Tasks by Status
+
 ```
 Show me all CREATED tasks
 ```
 
 ### ✅ Get Tasks NOT Completed
+
 ```
 Show me tasks that are not completed
 ```
 
 ### ✅ Update Task Status
+
 ```
 Update task with id 1 to status COMPLETED
 ```
 
 ### ✅ Combined Operation
+
 ```
 Create a task called "Write documentation" and mark it as IN_PROGRESS
 ```
@@ -193,7 +241,8 @@ A ready-to-use Postman collection is included in the project:
 src/main/resources/TaskAgent.postman_collection.json
 ```
 
-### How to Import
+**How to Import:**
+
 1. Open **Postman**
 2. Click **Import** (top left)
 3. Select `TaskAgent.postman_collection.json`
