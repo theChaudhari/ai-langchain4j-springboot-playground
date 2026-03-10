@@ -18,4 +18,9 @@ public class AgentController {
             @RequestBody String message) {
         return agent.chat(sessionId, message);
     }
+
+    @GetMapping("/version")
+    public String version() {
+        return "Version 2.0 - CI/CD Pipeline Working!";
+    }
 }
